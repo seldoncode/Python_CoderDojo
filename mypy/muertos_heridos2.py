@@ -1,3 +1,7 @@
+'''
+Juego: Muertos y heridos (Mastermind)
+'''
+
 import random
 import os
 random.seed()
@@ -25,7 +29,7 @@ print("*************************************************************************
 
 input()
 
-# Computadora elige al azar los números para adivinar, sin repetición
+# La máquina elige al azar los números para adivinar, sin repetición
 
 while len(numero) < 4:
     digito =  random.choice(digitos)

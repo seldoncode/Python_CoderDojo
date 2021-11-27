@@ -1,89 +1,35 @@
-'''
-Juego: Muertos y heridos (Mastermind)
-'''
-
 import random
-import os
-
-digitos = "0123456789"
-numero = ""              # número secreto
-muertos = 0
-heridos = 0
-intento = None
-intentos = []   # recoge todos los intentos indicando cuantos muertos y heridos hay Ejemplo: [[1234,1,0], [5678,2,1], [5617,2,2]]
-salir = False
-
-# Presentación del programa
-
-os.system("clear")
-
-print("********************************************************")
-print("*                                                      *")
-print("*                Juego Muertos y Heridos               *")
-print("*                 Dispone de 15 intentos               *")
-print("*                                                      *")
-print("*                Pulse ENTER para empezar              *")
-print("*                                                      *")
-print("********************************************************")
-
-input()       # Está esperando hasta que se pulsa ENTER
-
-# Generamos el número aleatorio secreto
-
-while len(numero) < 4:
-    digito = random.choice(digitos)
-    if digito not in numero:
-        numero += digito
-
-# Bucle principal mientras no se acierte el número
-
-while True:
-
-    os.system("clear")
-    
-    print("********************************************************")
-    print("*                  MUERTOS Y HERIDOS                   *")
-    print("********************************************************")
-    print("*           NUMERO       -       M  .  H               *")
-    print("*          --------      -     ------------            *")
-
-    # Mostramos todos los intentos que el usuario ha hecho hasta el momento
-
-    for i in range(len(intentos)):
-        print(f"*           {intentos[i][0]}         -      {intentos[i][1]} - {intentos[i][2]}              *")
-    print("*                                                      *")
-
-
-    # Comprobación de si se ha ganado, y salida del programa en ese caso
-
-    if numero == intento:
-            print("*         Has acertado el número. Has ganado.          *")
-            print(f"*           Has necesitado {len(intentos)} intentos.                   *")
-            break
-
-    # Comprobación de los intentos, y salida del programa si agotados
-
-    if len(intentos) >= 15:
-        print("*        Has agotado los intentos. Has perdido.        *")
-        print(f"*                El número era: {numero}                   *")
-        break
-
-    # Bucle para que el usuario elija un número correcto
-
-    while True:
-        intento = input("=> Introduzca su intento ('q' para salir): ")
-        if intento == "q":
-            salir = True       # bandera para luego salir del bucle principal
-            break              # para salir del while interno
-        elif 
-
-
-
-
-
-
-
-
-
-
-
+random.seed()
+print("============= Juego de los Muertos y Heridos =============")
+print("Dispone de 15 intentos para adivinar el número secreto de cuatro dígitos sin repetición.")
+print("Puede salir en cualquier momento tecleando cualquier caracter no numérico.")
+secreto = [str(x) for x in random.sample(range(10), 4)]
+#print(secreto)         # descomentar esta línea para hacer trampas
+tirada = 0
+jugando = True
+while jugando:
+  tirada += 1
+  incorrectos = True    # inicialmente pensamos que los número que dice el jugador están incorrectos
+  while incorrectos:    # mientras pensemos que están incorrectos pediremos que introduzca un número sin repetición y de 4 dígitos
+    n = input(f"Tirada {tirada}: Diga un número de cuatro dígitos entre 0 y 9, sin repetir digitos: ")
+    if not(n.isnumeric()) or len(n) != 4:
+      print("Fin del juego.")
+      incorrectos=False       # para salirnos del while interno
+      jugando=False           # ya nos queremos salir
+    intento = list(n)    # ['1', '2', '3', '4']
+    if sorted(intento) == sorted(list(set(intento))): # para evitar que el número que diga el jugador tenga repetidos
+      incorrectos = False
+  if not(jugando): break      # si queremos salir, ya hemos dicho que jugando=False y ya nos saliemos del while principal
+  resultado = ""
+  m = h = 0                   # inicializamos los muertos y heridos
+  for i in range(4):
+    if intento[i] in secreto: h += 1
+    if intento[i] == secreto[i]: m += 1; h -= 1
+    resultado = f"{m}M{h}H"
+  print(f"{intento[0]+intento[1]+intento[2]+intento[3]} : {resultado}")
+  if resultado == "4M0H":
+    print(f"Felicidades: ha adivinado el número secreto {secreto[0]+secreto[1]+secreto[2]+secreto[3]} en {tirada} tiradas.")
+    jugando = False
+  elif tirada==15:
+    print("Se han agotado los 15 intetos. Fin del juego.")
+    jugando = False
