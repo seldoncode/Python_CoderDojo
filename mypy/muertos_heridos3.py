@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # Juego de los Muertos y Heridos (Cows and Bulls game)
 import random
 import os
@@ -5,11 +8,10 @@ random.seed()
 
 # Inicializamos variables
 
-m = h = 0                                 # m son los muertos, h son los heridos
+intento = None   # intento será el string que teclee el jugador
 tirada = 0
 jugando = True
 r = []           # matriz resultado: almacena todos los intentos [[XXXX, m, h], [XXXX, m, h]]
-digitos = "0123456789"
 
 # Presentación del programa
 
@@ -22,26 +24,56 @@ print("*                     Tienes 15 intentos                                 
 print("*                                                                        *")
 print("*                 Pulsa ENTER para empezar                               *")
 print("*                                                                        *")
+print("*         Se sale si se introduce algún caracter no numérico             *")
 print("**************************************************************************")
 
 input()
 
 # La máquina elige al azar, sin repetición, los cuatro digitos del nº secreto
-# secreto es un string de cuatro dígitos, por ejemplo: "0249"
-# secreto = random.sample(range(10), k=4)   # ejemplo: [0, 8, 1, 9]
 
-secreto = "".join(random.choices(digitos, k=4))
+secreto = ''.join(random.sample("0123456789", 4)) # es un string
+#print(secreto)           # descomentar esta línea para hacer trampas
 
 # Bucle principal mientras no se acierte el número
 
 while jugando:       # mientras estemos jugando
     
-    # Pedimos al jugador su intento
+    # Mostramos los resultados en una tabla
+
+    os.system("clear")
+    
+    print("**********************************************************")
+    print("*                   Muertos y Heridos                    *")
+    print("**********************************************************")
+    print("*           Número       -       Muertos  -  Heridos     *")
+    print("*         ----------     -      ---------    -------     *")
+
+    # Muestra todos los intentos que el usuario ha hecho hasta el momento
+
+    for i in range (len(r)):
+        print(f"*            {r[i][0]}        -          {r[i][1]}     -    {r[i][2]}         *")
+        print("*                                                        *")
+
+    # Comprobación de si se ha ganado, y salida del programa en ese caso
+
+    if intento == secreto:
+        print("*            Has acertado el número. Has ganado.         *")
+        print(f"*                 Has necesitado {len(r)} intentos.                *")
+        break
+
+    # Comprobación de los intentos, y salida del programa si agotados
+
+    if len(r) >= 15:
+        print("*          Has agotado los intentos. Has perdido.        *")
+        print(f"*            El número era: {secreto}                         *")
+        break
+
+    # Bucle para que el usuario elija un número correcto
     
     incorrecto = True    # inicialmente pensamos que el número que introduce el jugador es incorrecto
 
     while incorrecto:
-        print("Se sale si se introduce algún caracter no numérico.")
+        print()
         intento = input("=> Introduce cuatro dígitos sin repetir: ")
         if not(intento.isnumeric()):
             print("Al introducir un caracter no numérico el juego termina.")
@@ -53,35 +85,23 @@ while jugando:       # mientras estemos jugando
         elif sorted(intento) != sorted(set(intento)):
             print("No debe haber cifras repetidas.")
         else:
-            #print("Su intento es: ", intento)
+            print("Su intento es: ", intento)
             incorrecto = False
 
     if not(jugando):
         print("Fin del juego")
         break
 
-    
-    
+    # Se calculan los Muertos y Heridos
 
+    m = h = 0        # m son los muertos, h son los heridos
+    for i in range(4):
+        if intento[i] in secreto:
+            if intento[i] == secreto[i]:
+                m += 1
+            else:
+                h += 1
 
-'''
-    
-    os.system("clear")
-    
-    print("**********************************************************")
-    print("*                   Muertos y Heridos                    *")
-    print("**********************************************************")
-    print("*           Número       -       Muertos  -  Heridos     *")
-    print("*         ----------     -      ---------    -------     *")
-                                                                                                                                                                                                                                                                                                                                                                                                                                  
-    # Muestra todos los intentos que el usuario ha hecho hasta el momento
+    # Añadimos el intento y el resultado a la matriz de resultados
 
-    for i in range (len(r)):
-        print(f"*            {r[i][0]}        -          {r[i][1]}     -    {r[i][2]}         *")
-        print("*                                                        *")
-
-    # Comprobación de si se ha ganado, y salida del programa en ese caso
-
-    if 
-
-    '''
+    r.append([intento, m, h])
