@@ -1,11 +1,10 @@
+# resuelto con strings
 import random
 import os
 random.seed()
 palabras = ['AUSTRALIA','GANADERIA','ASOMBROSO','EXTRAORDINARIO','AGUAFIESTAS',
             'IMPRESIONANTE','ESPAÑA','ROMANTICO','HISTORICO','NEANDERTAL']
 palabra = random.choice(palabras)
-
-#print(secreta)
 
 fallo0 = '''
            !===N
